@@ -1,0 +1,20 @@
+name: test actions
+
+on:
+  workflow_dispatch:
+    push:
+      branches:
+        - main
+
+jobs:
+  first-job:
+    name: Initializing server
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@master
+      
+      - name: Echo teste
+        run: |
+          echo "Hello World" > teste.txt
+        continue-on-error: true
