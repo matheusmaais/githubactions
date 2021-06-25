@@ -22,7 +22,7 @@ jobs:
         continue-on-error: true
   
   DeployDev: 
-    name: Deploy to Production Environment
+    name: Deploy to Development Environment
     if: github.event.ref == 'refs/heads/main'
     needs: [Job-test]
     runs-on: ubuntu-20.04
