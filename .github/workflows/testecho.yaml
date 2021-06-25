@@ -17,4 +17,5 @@ jobs:
       - name: Echo teste
         run: |
           echo "Hello World" > teste.txt
+          cat teste.txt
         continue-on-error: true
