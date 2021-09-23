@@ -1,0 +1,62 @@
+name: Lambda
+on:
+  workflow_dispatch:
+  push:
+    #you could remove paths, if you want to monitor all the repository
+    paths:
+      - 'my_path' #directory that you want to monitor files changed
+
+jobs:
+  checkout:
+    name: Deploy Lambda
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Checkout Repository
+      uses: actions/checkout@master
+      with:
+        fetch-depth: 2
+
+    - name: Get all modifications
+      id: changed-files-for-lambda-source
+      uses: tj-actions/changed-files@v1.1.2
+      with:
+        files:  |
+          my_path/*
+    
+    - name: Get all added lambdas
+      if: steps.changed-files-for-lambda-source.outputs.added_files != '' #verify if list is not empty
+      run: |
+      #convert string to array
+        added="${{ steps.changed-files-for-lambda-source.outputs.added_files }}"; 
+        read -a myarray <<< $added
+        echo "My array: ${myarray[@]}"
+        echo "Number of files added: ${#myarray[@]}"
+        for i in ${myarray[@]}; do
+           echo `basename $i` >> added.txt
+        done
+        cat added.txt
+        
+    - name: Get all modified lambdas
+      if:  steps.changed-files-for-lambda-source.outputs.modified_files != ''
+      run: |
+        modified="${{ steps.changed-files-for-lambda-source.outputs.modified_files }}"
+        read -a myarray <<< $modified
+        echo "My array: ${myarray[@]}"
+        echo "Number of files modifieds: ${#myarray[@]}"
+        for i in ${myarray[@]}; do
+           echo `basename $i` >> modified.txt
+        done
+        cat modified.txt
+   
+    - name: Get all deleted lambdas
+      if: steps.changed-files-for-lambda-source.outputs.deleted_files != ''
+      run: |
+        deleted="${{ steps.changed-files-for-lambda-source.outputs.deleted_files }}"; 
+        read -a myarray <<< $deleted
+        echo "My array: ${myarray[@]}"
+        echo "Number of files deleted: ${#myarray[@]}"
+        for i in ${myarray[@]}; do
+           echo `basename $i` >> deleted.txt
+        done
+        cat deleted.txt
