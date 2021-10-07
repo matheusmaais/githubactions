@@ -1,0 +1,106 @@
+name: POC Lambda
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - "main"
+
+
+jobs:
+  checkout:
+    name: Deploy Lambda
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@master
+      with:
+          fetch-depth: 2
+
+    - name: Install zip
+      uses: montudor/action-zip@v1
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: 
+        aws-secret-access-key: 
+        aws-region: us-east-1
+    
+    - name: Get all modifications
+      id: changed-lambdas
+      uses: tj-actions/changed-files@v1.1.2
+      with:
+        files:  |
+          YOURPATH/*.zip
+      continue-on-error: false
+
+      - name: Get Deleted lambdas
+      id: deleted-lambdas
+      uses: tj-actions/changed-files@v1.1.2
+      with:
+        path: source/lambda/
+
+      continue-on-error: false
+    
+    - name: Deleting Lambdas
+      if: steps.deleted-lambdas.outputs.deleted_files != ''
+      run: |
+        chmod +x deleted.sh 
+        ./deleted.sh "${{ steps.deleted-lambdas.outputs.deleted_files }}"
+    
+    - uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+        cache: 'npm'
+    - run: npm install
+    - run: npm run build
+    # - name: NPM Install
+    #   run:  apt update && npm install && npm run build
+    #   continue-on-error: false
+
+    - name: Creating Zip Files
+      run: |
+        chmod +x zip-lambdas.sh
+        ./zip-lambdas.sh
+      continue-on-error: false
+
+    - name: Update/Create Lambdas
+      run: |
+        ls -1 | grep .zip | sed 's/.zip//' > lambdas.txt
+        ./modified.sh lambdas.txt
+      continue-on-error: false
+    
+    # - name: Get all added lambdas
+    #   if: steps.changed-lambdas.outputs.added_files != ''
+    #   run: |
+    #     echo "dir original $PWD"
+    #     cd $LAMBDA_PATH
+    #     echo $PWD
+    #     ../modified.sh "${{ steps.changed-lambdas.outputs.added_files }}"
+    #   continue-on-error: false
+        
+    # - name: Get all modified lambdas
+    #   if:  steps.changed-lambdas.outputs.modified_files != ''
+    #   run: |
+    #     echo "dir original $PWD"
+    #     cd $LAMBDA_PATH
+    #     echo $PWD
+    #     ../modified.sh "${{ steps.changed-lambdas.outputs.modified_files }}"
+    #   continue-on-error: false
+
+    # - name: Get all deleted files within lambdas
+    #   if: steps.changed-lambdas.outputs.deleted_files != ''
+    #   run: |
+    #     echo "dir original $PWD"
+    #     cd $LAMBDA_PATH
+    #     echo $PWD
+    #     ../modified.sh "${{ steps.changed-lambdas.outputs.deleted_files }}"
+    #   continue-on-error: false
+
+    # - name: Summary
+    #   run: |
+    #    if [ -e $WORKER_PATH/modified.txt ] ; then
+    #      echo List  Modified Lambdas:
+    #      cat $WORKER_PATH/modified.txt
+    #    fi
+    # continue-on-error: true
+
