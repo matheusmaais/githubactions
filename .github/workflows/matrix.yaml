@@ -1,7 +1,8 @@
 name: Matrix
 on: push
+
 jobs:
- node-version:
+  node-version:
     strategy:
       matrix:
         os: [macos-latest, ubuntu-latest, windows-latest]

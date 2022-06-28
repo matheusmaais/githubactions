@@ -5,6 +5,9 @@ on: push
 env:
   WF_ENV: Availabe to all jobs
 
+#to call a secret:
+#${{secrets.SECRET_NAME}}
+
 jobs:
   log-env:
     runs-on: ubuntu-latest
@@ -34,7 +37,7 @@ jobs:
         echo "GITHUB_WORKSPACE: $GITHUB_WORKSPACE"
         echo "GITHUB_SHA: $GITHUB_SHA"
         echo "GITHU_REF: $GITHUB_REF"
-        
+
 
 
 
