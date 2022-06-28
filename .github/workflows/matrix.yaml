@@ -16,7 +16,7 @@ jobs:
             node-version: 6
           - os: macos-latest
             node-version: 8
-      max-parallel: 2
+      max-parallel: 10
     runs-on: ${{ matrix.os }}
     env:
       IS_UBUNTU_8: ${{ matrix.is_ubuntu_8 }}
@@ -30,4 +30,6 @@ jobs:
          node_version: ${{ matrix.node-version }}
      
      - name: Log node version
-       run: node -v
+       run: |
+         node -v
+         echo "is ubuntu 8? $IS_UBUNTU_8"
