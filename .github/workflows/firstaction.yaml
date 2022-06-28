@@ -1,0 +1,13 @@
+name: Actions on: 
+on: push
+jobs:
+  run-github-action:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Simple JS Action
+        id: greet #to reference this step in other, we need provide a id name
+        uses: actions/hello-world-javascript-action@v1
+        with: 
+          who-to-greet: Matheus
+      - name: Log Greeting Time from previously action
+        run: echo "${{ steps.greet.outputs.time }}"
