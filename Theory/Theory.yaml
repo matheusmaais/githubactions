@@ -1,0 +1,11 @@
+
+What is GithubActions: 
+  - Tool that lets your automate your software development workflow
+  - Can write individual tasks, called actions and combine them to create a custom workflow.
+  Workflow:
+  - Automated process that you can setup in an repository
+  Where it runs
+  - In a Github virtual machine, or it can be self hosted (LINUX, Windows, MacOS)
+  Runner: 
+  - Machine where github actions run, is maintened by github and we can not customize the hardware
+
