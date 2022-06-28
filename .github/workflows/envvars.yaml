@@ -1,0 +1,42 @@
+name: ENV Variables
+on: push
+
+#this env will be available in all jobs
+env:
+  WF_ENV: Availabe to all jobs
+
+jobs:
+  log-env:
+    runs-on: ubuntu-latest
+    env:
+      JOB_ENV: Available in all steps in log-env job
+    steps:
+      - name: Log ENV Variables
+        env:
+          STEP_ENV: Available only in this step
+        run: |
+          echo "WF_ENV: $WF_ENV"
+          echo "JOB_ENV: $JOB_ENV"
+          echo "STEP_ENV: $STEP_ENV"
+  
+  log-default-envs:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Default Env Vars
+      run: |
+        echo "HOME: $HOME"
+        echo "GITHUB_WORKFLOW: $GITHUB_WORKFLOW"
+        echo "GITHUB_ACTION: $GITHUB_ACTION"
+        echo "GITHUB_ACTIONS: $GITHUB_ACTIONS"
+        echo "GITHUB_ACTOR: $GITHUB_ACTOR"
+        echo "GITHUB_REPOSITORY: $GITHUB_REPOSITORY"
+        echo "GITHUB_EVENT_NAME: $GITHUB_EVENT_NAME"
+        echo "GITHUB_WORKSPACE: $GITHUB_WORKSPACE"
+        echo "GITHUB_SHA: $GITHUB_SHA"
+        echo "GITHU_REF: $GITHUB_REF"
+        
+
+
+
+
+
