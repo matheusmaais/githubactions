@@ -11,6 +11,11 @@ jobs:
         run: |
           pwd
           ls
+          echo $GITHUB_SHA 
+          echo $GITHUB_REPOSITORY
+          echo $GITHUB_WORKSPACE
+          echo ${{ github.token}}
+          echo $GITHUB_TOKEN
   
       - name: Simple JS Action
         id: greet #to reference this step in other, we need provide a id name
